@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Climb &amp; the Loop · 攀行與迴旋 · 登りと渦 · 오름과 소용돌이</title>
+<meta name="author" content="CKH">
+<meta name="copyright" content="© MMXXV CKH — artwork, words & code. All rights reserved.">
+<meta name="description" content="“The Climb & the Loop” — an animated oil diptych on positive and negative thinking. Artwork, words & code by CKH.">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    min-height:100vh;
+    background:#1a130d;
+    background-image:
+      radial-gradient(1200px 700px at 50% -120px, rgba(255,214,150,.10), transparent 60%),
+      radial-gradient(1700px 1000px at 50% 120%, rgba(0,0,0,.55), transparent 65%);
+    color:#e8dfc8;
+    font-family:Georgia,"Palatino Linotype","Book Antiqua","Times New Roman",serif;
+    overflow-x:hidden;
+  }
+  .noise{
+    position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:40;opacity:.14;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  }
+
+  header{text-align:center;padding:clamp(30px,5vh,56px) 20px 6px}
+  .over{letter-spacing:.34em;font-size:11px;text-transform:uppercase;color:#b98d54}
+  h1{
+    margin:.35em 0 .25em;font-weight:500;font-style:italic;
+    font-size:clamp(30px,5vw,54px);color:#f0e6cd;
+    text-shadow:0 2px 18px rgba(0,0,0,.6);
+  }
+  .sub{margin:0;color:#b4a68a;font-style:italic;font-size:clamp(13px,1.6vw,16px)}
+
+  .lang{
+    display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:clamp(16px,2.5vh,24px);
+  }
+  .lang button{
+    font-family:inherit;font-size:12.5px;letter-spacing:.06em;
+    padding:5px 13px;border-radius:999px;cursor:pointer;
+    color:#cdb88b;background:transparent;border:1px solid rgba(201,168,106,.4);
+    transition:border-color .25s ease,color .25s ease,transform .25s ease,background .25s ease;
+  }
+  .lang button:hover{border-color:rgba(233,206,150,.85);color:#efe0b8;transform:translateY(-1px)}
+  .lang button.on{
+    background:linear-gradient(180deg,#c9a86a,#8a6b42);color:#241a10;
+    border-color:#c9a86a;
+    box-shadow:0 3px 10px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,240,200,.5);
+  }
+  .lang button:focus-visible{outline:1px dashed #e9ce96;outline-offset:2px}
+  .lang .motion::before{
+    content:"";display:inline-block;width:7px;height:7px;border-radius:50%;
+    margin-right:6px;vertical-align:1px;
+    box-shadow:inset 0 0 0 1.4px currentColor;
+  }
+  .lang .motion.on::before{background:currentColor}
+
+  .gallery{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) clamp(14px,3vw,42px) minmax(0,1fr);
+    gap:clamp(14px,2.5vw,34px);
+    align-items:start;
+    max-width:1200px;margin:0 auto;
+    padding:clamp(18px,3.5vh,38px) clamp(16px,4vw,44px) 0;
+  }
+  .panel{display:flex;flex-direction:column;align-items:center;transition:transform .5s ease}
+  .panel.pos{margin-top:-4px}
+  .panel.neg{margin-top:14px}
+  .panel.pos:hover{transform:translateY(-7px)}
+  .panel.neg:hover{transform:translateY(-5px)}
+
+  .frame{
+    position:relative;margin:0;width:100%;max-width:520px;
+    padding:clamp(10px,1.6vw,18px);border-radius:6px;
+    background:linear-gradient(140deg,#6b543a,#2c2115 30%,#59452e 55%,#241a10 80%,#4a3a26);
+    box-shadow:
+      0 26px 52px -18px rgba(0,0,0,.85),
+      0 6px 18px rgba(0,0,0,.5),
+      inset 0 0 0 1px rgba(255,220,160,.25),
+      inset 0 0 26px rgba(0,0,0,.55);
+  }
+  .fillet{
+    display:block;padding:5px;border-radius:3px;
+    background:linear-gradient(180deg,#d9b878,#8a6b42 45%,#c9a86a 60%,#6e5432);
+    box-shadow:inset 0 0 0 1px rgba(40,25,10,.8);
+  }
+  .canvas-wrap{
+    position:relative;display:block;height:0;padding-top:126.6667%;overflow:hidden;border-radius:1px;
+    background:#202020;box-shadow:inset 0 0 18px rgba(0,0,0,.7);
+    user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+  }
+  .canvas-wrap canvas{
+    position:absolute;top:0;left:0;width:100%;height:100%;display:block;
+    -webkit-user-drag:none;user-drag:none;pointer-events:none;
+  }
+  .canvas-wrap::before{
+    content:"";position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;
+    background:linear-gradient(115deg,rgba(255,244,214,.10) 0%,rgba(255,244,214,.02) 22%,transparent 40%,transparent 68%,rgba(20,10,4,.16) 100%);
+  }
+  .canvas-wrap::after{
+    content:"";position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:6;
+    background:
+      repeating-linear-gradient(0deg,rgba(0,0,0,.055) 0 1px,transparent 1px 3px),
+      repeating-linear-gradient(90deg,rgba(0,0,0,.04) 0 1px,transparent 1px 3px);
+    mix-blend-mode:multiply;
+  }
+
+  .plaque{
+    position:relative;width:min(88%,460px);margin:16px auto 0;
+    padding:12px 22px 12px;border-radius:3px;text-align:center;color:#33240f;
+    background:linear-gradient(180deg,#c3a874,#93764a 55%,#b3955f);
+    box-shadow:
+      0 10px 22px -8px rgba(0,0,0,.8),
+      inset 0 1px 0 rgba(255,240,200,.5),
+      inset 0 -1px 0 rgba(50,30,10,.6);
+  }
+  .plaque::before,.plaque::after{
+    content:"";position:absolute;top:26px;width:7px;height:7px;border-radius:50%;
+    transform:translateY(-50%);
+    background:radial-gradient(circle at 35% 30%,#efe0b8,#6e5432 70%);
+    box-shadow:inset 0 0 2px rgba(0,0,0,.7);
+  }
+  .plaque::before{left:8px}.plaque::after{right:8px}
+  .plate-no{font-size:11px;letter-spacing:.22em;text-transform:uppercase;opacity:.75;margin-bottom:7px}
+  .caption{margin:0;font-size:clamp(13.5px,1.45vw,16px);line-height:1.62}
+  .verb{font-style:normal;font-weight:700;letter-spacing:.05em;font-size:.88em;white-space:nowrap}
+  .verb.warm{color:#7a4a14}
+  .verb.cold{color:#2f3350}
+  .arr{width:50px;height:14px;vertical-align:-2px;margin:0 6px;color:#7a5a2c}
+  .panel.neg .arr{color:#4a4a66}
+  .epigraph{
+    margin:9px 0 0;padding-top:7px;
+    border-top:1px solid rgba(51,36,15,.22);
+    font-size:12px;font-style:italic;color:rgba(51,36,15,.72);line-height:1.55;
+  }
+
+  .knife{
+    align-self:center;justify-self:center;
+    width:22px;height:74%;min-height:240px;border-radius:12px/44px;transform:rotate(3deg);
+    background:linear-gradient(180deg,#e0a55e,#8a6b42 30%,#4d4868 70%,#8b93a1);
+    box-shadow:inset 0 0 8px rgba(0,0,0,.5),0 0 26px rgba(0,0,0,.6);
+    opacity:.85;
+  }
+
+  .rule{
+    width:min(560px,70%);height:1px;margin:clamp(28px,5vh,52px) auto 0;
+    background:linear-gradient(90deg,transparent,rgba(201,168,106,.45),transparent);
+  }
+
+  footer{
+    position:relative;
+    max-width:1200px;margin:clamp(24px,4.5vh,44px) auto 46px;padding:0 24px;
+    display:flex;flex-wrap:wrap;gap:16px 22px;align-items:center;justify-content:center;
+    color:#a2947a;font-size:13px;font-style:italic;text-align:center;
+  }
+  .note{margin:0}
+  .dabs{display:flex;gap:9px;align-items:center}
+  .dab{
+    display:block;width:21px;height:15px;
+    border-radius:60% 40% 55% 45%/60% 55% 45% 40%;
+    box-shadow:inset -2px -3px 4px rgba(0,0,0,.35),inset 2px 2px 3px rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.5);
+  }
+  .dab:nth-child(odd){transform:rotate(-7deg)}
+  .dab:nth-child(even){transform:rotate(6deg) translateY(1px)}
+  .seals{display:flex;gap:8px;margin-left:4px}
+  .seal{
+    width:30px;height:30px;border-radius:5px;display:grid;place-items:center;
+    box-shadow:0 2px 6px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.12);
+  }
+  .seal.sun{background:linear-gradient(160deg,#7c3b28,#54271b)}
+  .seal.loop{background:linear-gradient(160deg,#2f3350,#1d2138)}
+  .attrib{
+    position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);
+    font-size:10px;font-style:normal;letter-spacing:.1em;white-space:nowrap;
+    color:#1a130d;user-select:text;-webkit-user-select:text;
+    max-width:96%;overflow:hidden;
+  }
+  @media print{
+    .attrib{color:#000}
+  }
+
+  @media (max-width:880px){
+    .gallery{grid-template-columns:1fr}
+    .knife{display:none}
+    .panel.neg{margin-top:26px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .panel{transition:none}
+  }
+</style>
+</head>
+<body data-author="CKH" data-work="the-climb-and-the-loop">
+<!--
+  “The Climb & the Loop” — a diptych on thinking
+  artwork · words · code by CKH — MMXXV — plate id 4351
+  the pixels remember their painter; please ask before borrowing the idea
+-->
+<div class="noise" aria-hidden="true"></div>
+
+<header>
+  <div class="over" id="t-over">A diptych in oil — two studies of one mind</div>
+  <h1 id="t-title">The Climb &amp; the Loop</h1>
+  <p class="sub" id="t-sub">one mind, two weathers — the same brush, two directions of the heart</p>
+  <nav class="lang" aria-label="Language">
+    <button type="button" data-lang="en" title="English" aria-pressed="false">EN</button>
+    <button type="button" data-lang="zhHant" title="Traditional Chinese (Hong Kong)" aria-pressed="false">繁體</button>
+    <button type="button" data-lang="zhHans" title="Simplified Chinese" aria-pressed="false">简体</button>
+    <button type="button" data-lang="ja" title="日本語" aria-pressed="false">日本語</button>
+    <button type="button" data-lang="ko" title="한국어" aria-pressed="false">한국어</button>
+    <button type="button" id="motionBtn" class="motion on" title="Toggle animation (overrides Reduce Motion)" aria-pressed="true"><span id="t-motion">Motion</span></button>
+  </nav>
+</header>
+
+<main class="gallery">
+
+  <section class="panel pos">
+    <figure class="frame">
+      <span class="fillet">
+        <span class="canvas-wrap" id="wrapPos" role="img" aria-label="Oil painting: a small figure climbs a path of stones — each stone a failure — up a golden hillside toward a rising sun.">
+          <canvas id="pos"></canvas>
+          <canvas id="fxpos" aria-hidden="true"></canvas>
+        </span>
+      </span>
+    </figure>
+    <div class="plaque">
+      <div class="plate-no" id="t-plate1">Panel I · The Process</div>
+      <p class="caption"><em class="verb warm" id="t-p1verb">Think positive</em>
+        <svg class="arr" viewBox="0 0 64 16" aria-hidden="true"><path d="M2 9 C 20 3, 40 13, 58 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M50 3 L 60 8 L 49 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="t-p1main">even in falling, you are still walking — every failure a stone, every stone a step of becoming.</span></p>
+      <p class="epigraph"><span id="t-epiLabel">as first sketched —</span> “<span id="t-epi1">even failed, take it as a process of being successful.</span>”</p>
+    </div>
+  </section>
+
+  <div class="knife" aria-hidden="true"></div>
+
+  <section class="panel neg">
+    <figure class="frame">
+      <span class="fillet">
+        <span class="canvas-wrap" id="wrapNeg" role="img" aria-label="Oil painting: a bowed figure kneels on a cracked stone labelled “the mistake”, trapped in a slow vortex of blame, while a small distant spark labelled “success” recedes far away.">
+          <canvas id="neg"></canvas>
+          <canvas id="vort" aria-hidden="true"></canvas>
+          <canvas id="fxneg" aria-hidden="true"></canvas>
+        </span>
+      </span>
+    </figure>
+    <div class="plaque">
+      <div class="plate-no" id="t-plate2">Panel II · The Loop</div>
+      <p class="caption"><em class="verb cold" id="t-p2verb">Think negative</em>
+        <svg class="arr" viewBox="0 0 64 16" aria-hidden="true"><path d="M2 9 C 20 3, 40 13, 58 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M50 3 L 60 8 L 49 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="t-p2a">the mistake kept forever, blame circling self and others,</span>
+        <svg class="arr" viewBox="0 0 64 16" aria-hidden="true"><path d="M2 9 C 20 3, 40 13, 58 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M50 3 L 60 8 L 49 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="t-p2b">success drifting farther, ever farther away.</span></p>
+      <p class="epigraph"><span id="t-epiLabel2">as first sketched —</span> “<span id="t-epi2">forever remember the mistake and blaming self or others → more far away from being successful.</span>”</p>
+    </div>
+  </section>
+
+</main>
+
+<div class="rule" aria-hidden="true"></div>
+
+<footer>
+  <span class="dabs" aria-hidden="true">
+    <i class="dab" style="background:#9cb8d2"></i>
+    <i class="dab" style="background:#c8893a"></i>
+    <i class="dab" style="background:#f0c878"></i>
+    <i class="dab" style="background:#9db27c"></i>
+    <i class="dab" style="background:#4d4868"></i>
+    <i class="dab" style="background:#8b93a1"></i>
+    <i class="dab" style="background:#7d6f92"></i>
+    <i class="dab" style="background:#2c2f4c"></i>
+  </span>
+  <p class="note" id="t-foot">as every brief commands — keep the palette · keep the brushwork · keep the mood</p>
+  <span class="seals" aria-hidden="true">
+    <span class="seal sun" title="by CKH">
+      <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="4.4" fill="#f0c878"/><g stroke="#f0c878" stroke-width="1.6" stroke-linecap="round"><line x1="12" y1="2.5" x2="12" y2="5.5"/><line x1="12" y1="18.5" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5.5" y2="12"/><line x1="18.5" y1="12" x2="21.5" y2="12"/><line x1="5.3" y1="5.3" x2="7.4" y2="7.4"/><line x1="16.6" y1="16.6" x2="18.7" y2="18.7"/><line x1="5.3" y1="18.7" x2="7.4" y2="16.6"/><line x1="16.6" y1="7.4" x2="18.7" y2="5.3"/></g></svg>
+    </span>
+    <span class="seal loop">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#aab2c8" stroke-width="1.7" stroke-linecap="round"><path d="M12 12 a1.2 1.2 0 0 1 1.2 1.2 a2.4 2.4 0 0 1 -2.4 2.4 a3.6 3.6 0 0 1 -3.6 -3.6 a4.8 4.8 0 0 1 4.8 -4.8 a6 6 0 0 1 6 6"/></svg>
+    </span>
+  </span>
+  <div class="attrib">“The Climb &amp; the Loop” — artwork, words &amp; code by CKH · MMXXV · plate 4351</div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+var TAU=Math.PI*2, P_W=600, P_H=760;
+var CACHE={};
+
+/* ============================== i18n ============================== */
+var I18N={
+  en:{
+    code:'en', italic:true,
+    font:'Georgia, "Times New Roman", serif',
+    over:'A diptych in oil — two studies of one mind',
+    title:'The Climb & the Loop',
+    sub:'one mind, two hours of the same sky — the same brush, two directions of the heart',
+    plate1:'Panel I · The Process',
+    plate2:'Panel II · The Loop',
+    p1verb:'Think positive',
+    p1main:'even in falling, you are still walking — every failure a stone, every stone a step of becoming successful.',
+    p2verb:'Think negative',
+    p2a:'the mistake kept forever, blame circling self and others,',
+    p2b:'success drifting farther, ever farther away.',
+    epiLabel:'as first sketched —',
+    foot:'as every brief commands — keep the palette · keep the brushwork · keep the mood',
+    motion:'Motion',
+    ariaPos:'Oil painting: under a dawn sky turning from blue to gold, a small figure climbs a path of stones — each stone a failure — toward a rising sun.',
+    ariaNeg:'Oil painting: a bowed figure kneels on a cracked stone labelled “the mistake”, trapped in a slow vortex of blame, while a small distant spark labelled “success” recedes far away.',
+    cFall:'each fall, a stone … each stone, a step',
+    cSuccess:'success',
+    cFarther:'farther, ever farther …',
+    cMistake:'the mistake',
+    cRemember:'remember',
+    cSelf:'blame self',
+    cOthers:'blame others'
+  },
+  zhHant:{
+    code:'zh-Hant', italic:false,
+    font:'"Songti TC","Noto Serif TC","PMingLiU","Microsoft JhengHei",serif',
+    over:'油彩雙聯 — 同一心念的兩種習作',
+    title:'攀行與迴旋',
+    sub:'一心兩向 — 同一調色、同一筆觸、同一意境',
+    plate1:'第一聯 · 過程',
+    plate2:'第二聯 · 迴旋',
+    p1verb:'心向正面',
+    p1main:'跌倒亦是前行 — 每一跌是一塊石,每一石是一級,砌往成功。',
+    p2verb:'心向陰暗',
+    p2a:'錯誤銘記於心,自責與怨人不住迴旋,',
+    p2b:'成功便愈退愈遠。',
+    epiLabel:'當初那一句 —',
+    foot:'如每份簡報所囑 — 守住色調 · 守住筆觸 · 守住意境',
+    motion:'動態',
+    ariaPos:'油畫:一個小小身影沿著石徑向上攀 — 每塊石都是一次跌倒 — 朝金色山坡上的朝陽而行。',
+    ariaNeg:'油畫:俯身的身影跪在刻著「那個錯誤」的裂石上,困於緩緩迴旋的自責漩渦;遠方名為「成功」的小小微光,愈退愈遠。',
+    cFall:'一跌一石,一石一級',
+    cSuccess:'成功',
+    cFarther:'愈來愈遠……',
+    cMistake:'那個錯誤',
+    cRemember:'銘記',
+    cSelf:'自責',
+    cOthers:'怨人'
+  },
+  zhHans:{
+    code:'zh-Hans', italic:false,
+    font:'"Songti SC","Noto Serif SC","SimSun","Microsoft YaHei",serif',
+    over:'油彩双联 — 同一心念的两种习作',
+    title:'攀行与回旋',
+    sub:'一心两向 — 同一调色、同一笔触、同一意境',
+    plate1:'第一联 · 过程',
+    plate2:'第二联 · 回旋',
+    p1verb:'心向正面',
+    p1main:'跌倒亦是前行 — 每一跌是一块石,每一石是一级,砌往成功。',
+    p2verb:'心向阴暗',
+    p2a:'错误铭记于心,自责与怨人不住回旋,',
+    p2b:'成功便愈退愈远。',
+    epiLabel:'当初那一句 —',
+    foot:'如每份简报所嘱 — 守住色调 · 守住笔触 · 守住意境',
+    motion:'动态',
+    ariaPos:'油画:一个小小身影沿着石径向上攀 — 每块石都是一次跌倒 — 朝金色山坡上的朝阳而行。',
+    ariaNeg:'油画:俯身的身影跪在刻着「那个错误」的裂石上,困于缓缓回旋的自责漩涡;远方名为「成功」的小小微光,愈退愈远。',
+    cFall:'一跌一石,一石一级',
+    cSuccess:'成功',
+    cFarther:'愈来愈远……',
+    cMistake:'那个错误',
+    cRemember:'铭记',
+    cSelf:'自责',
+    cOthers:'怨人'
+  },
+  ja:{
+    code:'ja', italic:false,
+    font:'"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","MS PMincho",serif',
+    over:'油彩二連作 — ひとつの心、ふたつの習作',
+    title:'登りと渦',
+    sub:'ひとつの心、ふたつの向き — 同じ絵具、同じ筆致、同じ情趣',
+    plate1:'其の一 · 過程',
+    plate2:'其の二 · 渦',
+    p1verb:'前を向く',
+    p1main:'転びもまた歩み — ひとつの転びはひとつの石となり、その石が成功への階段となる。',
+    p2verb:'後ろを向く',
+    p2a:'過ちをいつまでも心に刻み、己を責め、人を責めと廻るうちに、',
+    p2b:'成功はさらに遠ざかっていく。',
+    epiLabel:'最初の一文 —',
+    foot:'ブリーフの掟 — 色調を、筆致を、情趣を、守ること',
+    motion:'動き',
+    ariaPos:'油絵:小さな人影が、ひとつひとつが転びである石を踏み、朝陽へと続く金色の坂を登っていく。',
+    ariaNeg:'油絵:うつむいた人影が「あの過ち」と刻まれた裂けた石に跪き、責めの緩やかな渦に囚われ、遠くの小さな光「成功」がさらに遠ざかっていく。',
+    cFall:'転びは石に、石は階に',
+    cSuccess:'成功',
+    cFarther:'遠く、もっと遠く……',
+    cMistake:'あの過ち',
+    cRemember:'思い出す',
+    cSelf:'己を責め',
+    cOthers:'人を責め'
+  },
+  ko:{
+    code:'ko', italic:false,
+    font:'"Nanum Myeongjo","Batang","AppleMyungjo",serif',
+    over:'유화 이폭화 — 한 마음의 두 가지 단면',
+    title:'오름과 소용돌이',
+    sub:'하나의 마음, 두 방향 — 같은 물감, 같은 붓질, 같은 정서',
+    plate1:'제1폭 · 과정',
+    plate2:'제2폭 · 소용돌이',
+    p1verb:'긍정을 향해',
+    p1main:'넘어짐도 걸음의 일부 — 매번의 넘어짐은 한 돌이 되고, 그 돌은 성공으로 오르는 디딤돌이 된다.',
+    p2verb:'부정을 향해',
+    p2a:'실수를 영원히 붙들어 자책과 원망 속을 맴돌수록,',
+    p2b:'성공은 더욱 멀어진다.',
+    epiLabel:'첫 문장 —',
+    foot:'모든 브리프의 명 — 색조를, 붓질을, 정서를 지키리라',
+    motion:'움직임',
+    ariaPos:'유화: 작은 인물이 실패를 새긴 돌을 하나씩 딛고, 떠오르는 태양을 향해 금빛 언덕을 오른다.',
+    ariaNeg:'유화: ‘그 실수’라 새겨진 갈라진 돌 위에 무릎 꿇은 인물이 원망의 느린 소용돌이에 갇히고, 멀리 ‘성공’이라는 작은 빛이 점점 더 멀어진다.',
+    cFall:'넘어짐은 돌이, 돌은 디딤돌이',
+    cSuccess:'성공',
+    cFarther:'멀어지고, 더 멀어지고……',
+    cMistake:'그 실수',
+    cRemember:'기억하며',
+    cSelf:'자책하며',
+    cOthers:'원망하며'
+  }
+};
+/* the artist's first sketch is quoted verbatim in every language */
+['zhHant','zhHans','ja','ko'].forEach(function(k){
+  I18N[k].epi1=I18N.en.epi1;
+  I18N[k].epi2=I18N.en.epi2;
+});
+I18N.en.epi1='even failed, take it as a process of being successful.';
+I18N.en.epi2='forever remember the mistake and blaming self or others → more far away from being successful.';
+
+var LANGS=['en','zhHant','zhHans','ja','ko'];
+var cur='en';
+function T(){return I18N[cur];}
+function cFont(size){return (T().italic?'italic ':'')+size+'px '+T().font;}
+
+function applyLang(l){
+  if(!I18N[l])l='en';
+  cur=l;
+  document.documentElement.lang=T().code;
+  var keys=['over','title','sub','plate1','plate2','p1verb','p1main','p2verb','p2a','p2b','epiLabel','epi1','epiLabel2','epi2','foot','motion'];
+  for(var i=0;i<keys.length;i++){
+    var el=document.getElementById('t-'+keys[i]);
+    var key=keys[i];
+    if(key==='epiLabel2')key='epiLabel';
+    if(el)el.textContent=T()[key];
+  }
+  var wp=document.getElementById('wrapPos'), wn=document.getElementById('wrapNeg');
+  if(wp)wp.setAttribute('aria-label',T().ariaPos);
+  if(wn)wn.setAttribute('aria-label',T().ariaNeg);
+  var btns=document.querySelectorAll('.lang button');
+  for(var b=0;b<btns.length;b++){
+    var on=btns[b].getAttribute('data-lang')===l;
+    btns[b].classList.toggle('on',on);
+    btns[b].setAttribute('aria-pressed',on?'true':'false');
+  }
+  try{localStorage.setItem('diptych-lang',l);}catch(e){}
+  syncMotionBtn();
+  paintAll();
+}
+
+/* ============================ painting ============================ */
+function C(h){
+  var v=CACHE[h]; if(v) return v;
+  v=[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+  CACHE[h]=v; return v;
+}
+function rgba(c,a){
+  if(a<0)a=0; else if(a>1)a=1;
+  return 'rgba('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+','+a.toFixed(3)+')';
+}
+function mixc(a,b,t){return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t];}
+function shade(c,amt){return amt<0 ? mixc(c,[26,17,10],-amt/100) : mixc(c,[255,246,222],amt/100);}
+function lerp(a,b,t){return a+(b-a)*t;}
+function mulberry32(seed){
+  var t=seed>>>0;
+  return function(){
+    t+=0x6D2B79F5;
+    var r=Math.imul(t^(t>>>15),1|t);
+    r^=r+Math.imul(r^(r>>>7),61|r);
+    return ((r^(r>>>14))>>>0)/4294967296;
+  };
+}
+
+function dab(ctx,x,y,r,col,a){
+  ctx.fillStyle=rgba(col,a);
+  ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();
+}
+
+/* a tapered oil brushstroke: shadow pass, body pass, highlight pass */
+function brush(ctx,x0,y0,x1,y1,w,col,o){
+  o=o||{};
+  var alpha=o.alpha==null?1:o.alpha, bend=o.bend||0, rng=o.rng||Math.random;
+  var jit=o.jit==null?0.7:o.jit;
+  var passes;
+  if(o.passes===false){ passes=[[0,col,alpha,1]]; }
+  else{
+    passes=[
+      [w*0.11, shade(col,-34), alpha*0.5,  1.05],
+      [0,      col,            alpha,      1   ],
+      [-w*0.13,shade(col, 32), alpha*0.38, 0.55]
+    ];
+  }
+  var dx=x1-x0, dy=y1-y0, len=Math.sqrt(dx*dx+dy*dy)||1;
+  var cx=(x0+x1)/2 - dy/len*bend*len;
+  var cy=(y0+y1)/2 + dx/len*bend*len;
+  var step=o.step||Math.max(1.6,w*0.42);
+  var n=Math.max(3,Math.ceil(len/step));
+  for(var pi=0;pi<passes.length;pi++){
+    var P=passes[pi];
+    ctx.fillStyle=rgba(P[1],P[2]);
+    for(var i=0;i<=n;i++){
+      var t=i/n, it=1-t;
+      var x=it*it*x0+2*it*t*cx+t*t*x1+(rng()-0.5)*jit*2;
+      var y=it*it*y0+2*it*t*cy+t*t*y1+(rng()-0.5)*jit*2;
+      var taper=Math.pow(Math.sin(Math.PI*t),0.45);
+      var r=Math.max(0.3, w*0.5*P[3]*taper);
+      ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();
+    }
+  }
+}
+
+function grain(ctx,W,H,rng,n,dark,light){
+  for(var i=0;i<n;i++){
+    dab(ctx,rng()*W,rng()*H,0.3+rng()*1.1, rng()<0.5?dark:light, 0.04+rng()*0.05);
+  }
+}
+
+/* ---------------- provenance: the pixels remember ---------------- */
+var wmReveal=false;
+var WM_TEXT='by CKH';
+var WM_MSG='by CKH · MMXXV · 4351';
+
+/* faint painted signatures — invisible as-is, visible under a levels stretch */
+function wmStamp(ctx){
+  var a=wmReveal?0.85:0.014;
+  var spots=[[0.15,0.22,-0.26],[0.79,0.15,0.24],[0.31,0.5,0.4],[0.7,0.44,-0.18],
+             [0.14,0.8,0.28],[0.85,0.87,-0.32],[0.52,0.66,0.12]];
+  ctx.save();
+  ctx.font='italic 600 24px Georgia, "Times New Roman", serif';
+  ctx.textAlign='center';
+  for(var i=0;i<spots.length;i++){
+    ctx.save();
+    ctx.translate(spots[i][0]*P_W,spots[i][1]*P_H);
+    ctx.rotate(spots[i][2]);
+    if(wmReveal){
+      ctx.shadowColor='rgba(0,0,0,0.55)';ctx.shadowBlur=4;
+      ctx.fillStyle='rgba(255,246,224,0.9)';
+    }else{
+      ctx.fillStyle=(i%2===0)?'rgba(255,255,255,'+a+')':'rgba(16,12,6,'+a+')';
+    }
+    ctx.fillText(WM_TEXT,0,0);
+    ctx.restore();
+  }
+  ctx.restore();
+  ctx.textAlign='left';
+}
+function wmStampCenter(ctx){
+  ctx.save();
+  ctx.font='italic 600 20px Georgia, "Times New Roman", serif';
+  ctx.textAlign='center';
+  if(wmReveal){
+    ctx.shadowColor='rgba(0,0,0,0.55)';ctx.shadowBlur=4;
+    ctx.fillStyle='rgba(255,246,224,0.9)';
+  }else{
+    ctx.fillStyle='rgba(255,255,255,0.012)';
+  }
+  ctx.fillText(WM_TEXT,300,532);
+  ctx.restore();
+  ctx.textAlign='left';
+}
+
+/* the buried copy: signature bits scattered through the red channel,
+   five-fold repetition + majority vote, keyed to a fixed scatter table */
+function wmEmbedLSB(canvas){
+  try{
+    var w=canvas.width,h=canvas.height;
+    if(w<60||h<60)return;
+    var ctx=canvas.getContext('2d');
+    var img=ctx.getImageData(0,0,w,h),d=img.data,N=w*h;
+    var bits=[],i,c,b;
+    for(var r=0;r<5;r++){
+      for(c=0;c<WM_MSG.length;c++){
+        var code=WM_MSG.charCodeAt(c)&0xFF;
+        for(b=7;b>=0;b--)bits.push((code>>b)&1);
+      }
+    }
+    for(i=0;i<bits.length;i++){
+      var px=(Math.imul(i+1,2654435761)>>>8)%N;
+      d[px*4]=(d[px*4]&0xFE)|bits[i];
+    }
+    ctx.putImageData(img,0,0);
+  }catch(e){}
+}
+function wmExtractLSB(canvas){
+  try{
+    var w=canvas.width,h=canvas.height;
+    if(w<60||h<60)return '';
+    var d=canvas.getContext('2d').getImageData(0,0,w,h).data,N=w*h;
+    var L=WM_MSG.length,total=L*8*5,bits=[],i,c,b;
+    for(i=0;i<total;i++){
+      var px=(Math.imul(i+1,2654435761)>>>8)%N;
+      bits.push(d[px*4]&1);
+    }
+    var out='';
+    for(c=0;c<L;c++){
+      var ch=0;
+      for(b=0;b<8;b++){
+        var v=0;
+        for(var r2=0;r2<5;r2++)v+=bits[(r2*L*8)+(c*8)+b];
+        ch=(ch<<1)|(v>=3?1:0);
+      }
+      out+=String.fromCharCode(ch);
+    }
+    return out;
+  }catch(e){return '';}
+}
+
+function label(ctx,txt,x,y,rot,size,al){
+  ctx.save();ctx.translate(x,y);ctx.rotate(rot);
+  ctx.font=cFont(size);
+  ctx.textAlign='center';ctx.lineJoin='round';
+  ctx.lineWidth=4;ctx.strokeStyle='rgba(10,10,20,0.6)';
+  ctx.strokeText(txt,0,0);
+  ctx.fillStyle='rgba(208,201,188,'+(al==null?0.95:al)+')';
+  ctx.fillText(txt,0,0);
+  ctx.restore();
+  ctx.textAlign='left';
+}
+
+/* ------------------------------------------------ PANEL I : the climb */
+function paintPositive(ctx){
+  var W=P_W,H=P_H,rng=mulberry32(20131);
+  var i,x,y,l;
+  ctx.clearRect(0,0,W,H);
+
+  ctx.fillStyle='#c9a878';ctx.fillRect(0,0,W,H);
+  /* dawn — night's blue overhead, yielding to gold at the horizon */
+  var sky=ctx.createLinearGradient(0,0,0,500);
+  sky.addColorStop(0,'#9cb8d2');sky.addColorStop(0.38,'#d3dccd');
+  sky.addColorStop(0.68,'#f2dda6');sky.addColorStop(1,'#e9b264');
+  ctx.fillStyle=sky;ctx.fillRect(0,0,W,520);
+
+  var blueCols=[C('#b7c9da'),C('#a5bfd4'),C('#cdd8d4'),C('#e6e6d2')];
+  var warmCols=[C('#f7ecc8'),C('#f0d497'),C('#e9bd75'),C('#fdf4de'),C('#e6b877')];
+  for(i=0;i<360;i++){
+    y=8+rng()*rng()*450; x=-40+rng()*(W+80); l=30+rng()*130;
+    var sc=(y<250||(y<330&&rng()<0.5))?blueCols:warmCols;
+    brush(ctx,x,y,x+l,y+(rng()-0.5)*7,3.5+rng()*5,
+      sc[(rng()*sc.length)|0],
+      {alpha:(sc===blueCols?0.05:0.08)+rng()*0.13,bend:(rng()-0.5)*0.22,passes:false,rng:rng,jit:1.1});
+  }
+
+  /* the sun */
+  var sx=408,sy=190,sr=62,ring;
+  for(ring=0;ring<3;ring++){
+    var rr=sr+14+ring*15;
+    for(i=0;i<34;i++){
+      var a=rng()*TAU, px=sx+Math.cos(a)*rr, py=sy+Math.sin(a)*rr*0.96;
+      var ta=a+Math.PI/2+(rng()-0.5)*0.5, tl=6+rng()*10;
+      brush(ctx,px-Math.cos(ta)*tl/2,py-Math.sin(ta)*tl/2,
+        px+Math.cos(ta)*tl/2,py+Math.sin(ta)*tl/2,3+rng()*2.5,
+        ring===0?C('#f7dc90'):C('#eeb264'),
+        {alpha:0.10+rng()*0.12,passes:false,rng:rng});
+    }
+  }
+  var cg=ctx.createRadialGradient(sx,sy,3,sx,sy,sr);
+  cg.addColorStop(0,'rgba(253,247,222,0.98)');
+  cg.addColorStop(0.55,'rgba(249,219,132,0.92)');
+  cg.addColorStop(1,'rgba(240,178,88,0)');
+  ctx.fillStyle=cg;ctx.beginPath();ctx.arc(sx,sy,sr,0,TAU);ctx.fill();
+  for(i=0;i<24;i++){
+    var a2=rng()*TAU, rr2=sr*(0.8+rng()*0.12);
+    var px2=sx+Math.cos(a2)*rr2, py2=sy+Math.sin(a2)*rr2, ta2=a2+Math.PI/2;
+    brush(ctx,px2-Math.cos(ta2)*6,py2-Math.sin(ta2)*6,
+      px2+Math.cos(ta2)*6,py2+Math.sin(ta2)*6,4+rng()*3,
+      rng()<0.5?C('#faecb4'):C('#efb45e'),
+      {alpha:0.5+rng()*0.3,rng:rng,jit:0.5});
+  }
+
+  function cloud(cx0,cy0,s){
+    for(var k=0;k<26;k++){
+      var x0=cx0+(rng()-0.5)*s*2.4, y0=cy0+(rng()-0.5)*s*0.7, l0=s*(0.5+rng()*0.9);
+      var cc0=rng();
+      brush(ctx,x0,y0,x0+l0,y0+(rng()-0.5)*3,4+rng()*4,
+        cc0<0.3?C('#d9b98a'):(cc0<0.6?C('#bfc7d1'):C('#f9f2df')),
+        {alpha:0.14+rng()*0.2,bend:(rng()-0.5)*0.1,passes:rng()<0.4,rng:rng});
+    }
+  }
+  cloud(150,120,60);cloud(470,300,44);cloud(84,296,38);
+
+  /* hillside that rises toward the sun */
+  function bump(v){return 170*Math.exp(-Math.pow((v-430)/210,2));}
+  function fieldTop(v){return 512+Math.sin(v*0.017+4)*8+Math.sin(v*0.041+2)*5-bump(v);}
+  function farTop(v){return 470+Math.sin(v*0.011+1.2)*10+Math.sin(v*0.027)*6;}
+  function band(topFn,cols,depth){
+    ctx.save();
+    ctx.beginPath();ctx.moveTo(-12,H+12);
+    for(var v=-12;v<=W+12;v+=8){ctx.lineTo(v,topFn(v));}
+    ctx.lineTo(W+12,H+12);ctx.closePath();ctx.clip();
+    ctx.fillStyle=rgba(cols[0],0.92);ctx.fillRect(0,300,W,H-300);
+    for(var d=0;d<depth;d+=7){
+      for(var v2=-12;v2<W+12;v2+=11){
+        if(rng()<0.5)continue;
+        var yy=topFn(v2)+d+(rng()-0.5)*4;
+        brush(ctx,v2,yy,v2+9+rng()*20,yy+(rng()-0.5)*5,2.5+rng()*3.5,
+          cols[1+((rng()*(cols.length-1))|0)],
+          {alpha:0.09+rng()*0.16,passes:false,rng:rng,bend:(rng()-0.5)*0.25});
+      }
+    }
+    ctx.restore();
+  }
+  band(farTop,  [C('#9db27c'),C('#8aa06b'),C('#b3c291'),C('#7c915f')],120);
+  band(fieldTop,[C('#b97f3f'),C('#a9752f'),C('#d1a05a'),C('#8f5f28'),C('#c08a44')],240);
+
+  /* wheat strokes leaning toward the light */
+  var wheatCols=[C('#e2ab52'),C('#c8893a'),C('#f0c878'),C('#a96e2c')];
+  for(i=0;i<560;i++){
+    x=rng()*W; y=505+rng()*(H-515);
+    if(y<fieldTop(x)+4){y=fieldTop(x)+4+rng()*8;}
+    var wl=8+rng()*16, k=(rng()-0.5)*0.8;
+    var wc=wheatCols[(rng()*wheatCols.length)|0];
+    brush(ctx,x,y,x+k*7+(x-sx)*0.015,y-wl,2+rng()*2.4,wc,
+      {alpha:0.25+rng()*0.35,bend:k*0.35,passes:(y>620&&rng()<0.5),rng:rng,jit:0.6});
+  }
+
+  /* the path of stones — every stone a failure, every failure a step */
+  var stones=[[112,652,36],[164,600,31],[222,545,27],[284,486,24],[340,424,21],[392,360,18]];
+  var si;
+  for(si=0;si<stones.length;si++){
+    var stx=stones[si][0], sty=stones[si][1], str=stones[si][2];
+    var lift=si/(stones.length-1);
+    ctx.fillStyle='rgba(88,52,22,0.33)';
+    ctx.beginPath();ctx.ellipse(stx+7,sty+str*0.42,str*1.05,str*0.4,0,0,TAU);ctx.fill();
+    ctx.fillStyle=rgba(C('#8a6a44'),0.97);
+    ctx.beginPath();ctx.ellipse(stx,sty,str,str*0.62,0,0,TAU);ctx.fill();
+    ctx.fillStyle=rgba(mixc(C('#cfa869'),C('#f4dc96'),lift),0.92);
+    ctx.beginPath();ctx.ellipse(stx-str*0.12,sty-str*0.16,str*0.82,str*0.45,0,0,TAU);ctx.fill();
+    for(var sp=0;sp<10;sp++){
+      var aa=rng()*TAU, rdd=str*(0.55+rng()*0.35);
+      dab(ctx,stx+Math.cos(aa)*rdd,sty+Math.sin(aa)*rdd*0.55,1+rng()*1.6,
+        rng()<0.5?C('#6d4e2c'):C('#e6c684'),0.18+rng()*0.22);
+    }
+    /* the mark of the fall */
+    ctx.strokeStyle='rgba(96,58,28,0.8)';ctx.lineWidth=2.2;ctx.lineCap='round';
+    var m=str*0.26;
+    ctx.beginPath();
+    ctx.moveTo(stx-m,sty-m*0.7);ctx.lineTo(stx+m,sty+m*0.7);
+    ctx.moveTo(stx+m,sty-m*0.7);ctx.lineTo(stx-m,sty+m*0.7);
+    ctx.stroke();
+  }
+  function arrowHead(ax,ay,ang,s,col,al){
+    ctx.save();ctx.translate(ax,ay);ctx.rotate(ang);
+    ctx.strokeStyle=rgba(col,al);ctx.lineWidth=2.2;ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.beginPath();ctx.moveTo(-6*s,-4*s);ctx.lineTo(2.5*s,0);ctx.lineTo(-6*s,4*s);ctx.stroke();
+    ctx.restore();
+  }
+  for(si=0;si<stones.length-1;si++){
+    var s1=stones[si], s2=stones[si+1];
+    var ax=s1[0]+10, ay=s1[1]-16, bx=s2[0]-8, by=s2[1]-12;
+    brush(ctx,ax,ay,bx,by,2.2,C('#7a5730'),{alpha:0.75,rng:rng,bend:0.3,jit:0.5});
+    arrowHead(bx,by,Math.atan2(by-ay,bx-ax),1,C('#7a5730'),0.85);
+  }
+  brush(ctx,394,344,402,318,2.2,C('#8a6436'),{alpha:0.8,rng:rng,bend:0.2});
+  arrowHead(402,318,Math.atan2(318-344,402-394),0.9,C('#8a6436'),0.85);
+
+  ctx.font=cFont(13);
+  ctx.fillStyle='rgba(92,56,26,0.85)';
+  ctx.fillText(T().cFall,58,708);
+
+  /* warm updrafts */
+  for(i=0;i<9;i++){
+    var ux=40+rng()*170, uy=380+rng()*260;
+    brush(ctx,ux,uy,ux+60+rng()*90,uy-40-rng()*70,3+rng()*3,C('#fdf2cf'),
+      {alpha:0.10+rng()*0.13,bend:0.45+rng()*0.3,rng:rng,jit:1.2});
+  }
+
+  /* varnish */
+  var vg=ctx.createRadialGradient(W/2,H*0.42,H*0.22,W/2,H*0.5,H*0.78);
+  vg.addColorStop(0,'rgba(52,40,30,0)');vg.addColorStop(1,'rgba(44,36,32,0.3)');
+  ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+  var tv=ctx.createLinearGradient(0,0,0,90);
+  tv.addColorStop(0,'rgba(38,50,72,0.2)');tv.addColorStop(1,'rgba(38,50,72,0)');
+  ctx.fillStyle=tv;ctx.fillRect(0,0,W,90);
+  grain(ctx,W,H,rng,2200,C('#3c3628'),C('#f4f2de'));
+  wmStamp(ctx);
+}
+
+/* ------------------------------------------------ PANEL II : the loop */
+function paintNegative(ctx){
+  var W=P_W,H=P_H,rng=mulberry32(97731);
+  var vcx=300,vcy=530;
+  var i;
+  ctx.clearRect(0,0,W,H);
+
+  ctx.fillStyle='#23273d';ctx.fillRect(0,0,W,H);
+  var sky=ctx.createLinearGradient(0,0,0,600);
+  sky.addColorStop(0,'#171b30');sky.addColorStop(0.45,'#2c2f4c');
+  sky.addColorStop(0.8,'#47425f');sky.addColorStop(1,'#554d63');
+  ctx.fillStyle=sky;ctx.fillRect(0,0,W,610);
+
+  /* sky dragged in curling strokes toward the vortex below */
+  var cols=[C('#2a2e4c'),C('#3a3c5e'),C('#4d4868'),C('#22243c'),C('#5c5678'),C('#8b93a1')];
+  for(i=0;i<460;i++){
+    var x=rng()*W, y=rng()*595;
+    var dx=x-vcx, dy=y-vcy, d=Math.sqrt(dx*dx+dy*dy)||1;
+    var away=Math.max(0,1-d/540);
+    var tx=-dy/d, ty=dx/d, k=0.25+away*1.15;
+    var l=10+rng()*30;
+    brush(ctx,x,y,
+      x+(tx*k+(rng()-0.5)*0.55)*l, y+(ty*k+(rng()-0.5)*0.35)*l,
+      2.4+rng()*3.2, cols[(rng()*cols.length)|0],
+      {alpha:0.07+rng()*0.13,passes:false,rng:rng,bend:away*0.2,jit:0.9});
+  }
+
+  /* misted moon */
+  var mg=ctx.createRadialGradient(470,140,4,470,140,46);
+  mg.addColorStop(0,'rgba(190,198,214,0.5)');
+  mg.addColorStop(0.7,'rgba(160,168,190,0.16)');
+  mg.addColorStop(1,'rgba(160,168,190,0)');
+  ctx.fillStyle=mg;ctx.beginPath();ctx.arc(470,140,46,0,TAU);ctx.fill();
+  for(i=0;i<12;i++){
+    var mx=418+rng()*70, my=112+rng()*62;
+    brush(ctx,mx,my,mx+18+rng()*22,my+(rng()-0.5)*3,3,C('#2b2e4a'),{alpha:0.45,passes:false,rng:rng});
+  }
+
+  /* cold ground */
+  var gnd=ctx.createLinearGradient(0,585,0,H);
+  gnd.addColorStop(0,'#2b2740');gnd.addColorStop(1,'#181523');
+  ctx.fillStyle=gnd;ctx.fillRect(0,585,W,H-585);
+  var gc=[C('#332e4a'),C('#221f33'),C('#3d3760'),C('#141220')];
+  var dd,v2;
+  for(dd=0;dd<170;dd+=8){
+    for(v2=-10;v2<W+10;v2+=12){
+      if(rng()<0.45)continue;
+      var gy=595+dd+(rng()-0.5)*5;
+      brush(ctx,v2,gy,v2+8+rng()*18,gy+(rng()-0.5)*4,2.2+rng()*3,
+        gc[(rng()*gc.length)|0],{alpha:0.10+rng()*0.18,passes:false,rng:rng});
+    }
+  }
+  for(i=0;i<40;i++){
+    var hx=rng()*W, hy=586+rng()*14;
+    brush(ctx,hx,hy,hx+10+rng()*16,hy+(rng()-0.5)*2,1.8,C('#6a6284'),
+      {alpha:0.12+rng()*0.1,passes:false,rng:rng});
+  }
+
+  /* success — small, high, and far */
+  var spx=86, spy=104;
+  dab(ctx,spx,spy,14,C('#d8c084'),0.13);
+  dab(ctx,spx,spy,7,C('#e6d29a'),0.24);
+  brush(ctx,spx-9,spy,spx+9,spy,1.6,C('#e9d6a0'),{alpha:0.85,rng:rng,jit:0.3});
+  brush(ctx,spx,spy-9,spx,spy+9,1.6,C('#e9d6a0'),{alpha:0.85,rng:rng,jit:0.3});
+  ctx.font=cFont(12);
+  ctx.fillStyle='rgba(203,185,138,0.85)';
+  ctx.fillText(T().cSuccess,spx+15,spy+4);
+
+  /* the fading trail that never arrives */
+  var t0x=246,t0y=408,c1x=152,c1y=312,t1x=spx+16,t1y=spy+16,t,it;
+  for(t=0;t<=1.001;t+=0.025){
+    it=1-t;
+    var px=it*it*t0x+2*it*t*c1x+t*t*t1x;
+    var py=it*it*t0y+2*it*t*c1y+t*t*t1y;
+    dab(ctx,px,py,1.6-t*0.7,C('#b7a97f'),(1-t)*0.42+0.03);
+  }
+  label(ctx,T().cFarther,152,300,-0.5,12,0.72);
+
+  /* the cracked slab — the mistake, kept alive at the centre */
+  ctx.fillStyle='rgba(10,10,18,0.4)';
+  ctx.beginPath();ctx.ellipse(vcx+7,vcy+16,66,20,0,0,TAU);ctx.fill();
+  ctx.fillStyle='#3a3348';ctx.beginPath();ctx.ellipse(vcx,vcy+6,58,17,0,0,TAU);ctx.fill();
+  ctx.fillStyle='#4a4258';ctx.beginPath();ctx.ellipse(vcx-3,vcy+2,48,12,0,0,TAU);ctx.fill();
+  ctx.strokeStyle='rgba(16,14,24,0.85)';ctx.lineWidth=1.6;ctx.lineCap='round';
+  var cracks=[[-30,4,-8,-2],[-8,-2,10,3],[10,3,30,-1],[-2,8,4,13],[16,6,22,11]];
+  for(i=0;i<cracks.length;i++){
+    ctx.beginPath();
+    ctx.moveTo(vcx+cracks[i][0],vcy+cracks[i][1]);
+    ctx.lineTo(vcx+cracks[i][2],vcy+cracks[i][3]);
+    ctx.stroke();
+  }
+  label(ctx,T().cMistake,vcx,vcy+40,0,12.5,0.9);
+
+  /* the bowed figure */
+  var fcol=C('#0f1119');
+  brush(ctx,vcx+16,vcy-2,vcx+2,vcy-16,7,fcol,{alpha:0.98,rng:rng,bend:0.25});
+  brush(ctx,vcx+2,vcy-16,vcx-10,vcy-20,6,fcol,{alpha:0.98,rng:rng,bend:0.2});
+  dab(ctx,vcx-14,vcy-15,5.5,fcol,1);
+  brush(ctx,vcx+4,vcy-13,vcx-11,vcy-11,2.6,fcol,{alpha:0.98,rng:rng});
+  brush(ctx,vcx+18,vcy-6,vcx+6,vcy-19,1.6,C('#6a6f8e'),{alpha:0.55,rng:rng});
+
+  /* the three turns of the loop */
+  label(ctx,T().cRemember,386,492,-0.10,14.5,0.95);
+  label(ctx,T().cSelf,214,578,0.08,14.5,0.95);
+  label(ctx,T().cOthers,298,400,-0.05,15.5,0.95);
+
+  /* heavier varnish */
+  var vg2=ctx.createRadialGradient(W/2,H*0.45,H*0.2,W/2,H*0.5,H*0.8);
+  vg2.addColorStop(0,'rgba(6,6,14,0)');vg2.addColorStop(1,'rgba(6,6,14,0.42)');
+  ctx.fillStyle=vg2;ctx.fillRect(0,0,W,H);
+  grain(ctx,W,H,rng,2600,C('#0a0c16'),C('#cfd4e2'));
+  wmStamp(ctx);
+}
+
+/* the vortex of blame, painted once, breathed forever */
+function paintVortex(vctx){
+  var W=P_W,H=P_H,rng=mulberry32(55217);
+  var vcx=300,vcy=530;
+  vctx.clearRect(0,0,W,H);
+  var cols=[C('#7d6f92'),C('#57506f'),C('#8b93a1'),C('#4a4462'),C('#a29ab0'),C('#3c3752')];
+  var arms=3, loops=2.35;
+  for(var a=0;a<arms;a++){
+    var start=a*(TAU/arms)+0.6;
+    for(var t=0;t<=1.0001;t+=0.012){
+      var R=lerp(158,18,t);
+      var ang=start+t*loops*TAU;
+      var x=vcx+Math.cos(ang)*R, y=vcy+Math.sin(ang)*R*0.78;
+      var tx=-Math.sin(ang), ty=Math.cos(ang)*0.78;
+      var tl=Math.sqrt(tx*tx+ty*ty)||1;
+      var l=7+rng()*9;
+      brush(vctx,x,y,x+tx/tl*l,y+ty/tl*l,2.2+(1-t)*3.2,
+        cols[(rng()*cols.length)|0],
+        {alpha:0.28+rng()*0.30,passes:t<0.35,rng:rng,bend:(rng()-0.5)*0.5,jit:0.8});
+    }
+  }
+  for(var c2=0;c2<3;c2++){
+    var ang2=c2*(TAU/3)+2.4, R2=104;
+    var x2=vcx+Math.cos(ang2)*R2, y2=vcy+Math.sin(ang2)*R2*0.78;
+    var ux=-Math.sin(ang2), uy=Math.cos(ang2)*0.78;
+    var ul=Math.sqrt(ux*ux+uy*uy)||1;
+    vctx.save();vctx.translate(x2,y2);vctx.rotate(Math.atan2(uy/ul,ux/ul));
+    vctx.strokeStyle='rgba(216,210,226,0.8)';vctx.lineWidth=2.1;
+    vctx.lineCap='round';vctx.lineJoin='round';
+    vctx.beginPath();vctx.moveTo(-6,-4.5);vctx.lineTo(3,0);vctx.lineTo(-6,4.5);vctx.stroke();
+    vctx.restore();
+  }
+  wmStampCenter(vctx);
+}
+
+/* ------------------------------------------------ mounting & breath */
+var posC=document.getElementById('pos'), negC=document.getElementById('neg'),
+    vortC=document.getElementById('vort'),
+    fxpC=document.getElementById('fxpos'), fxnC=document.getElementById('fxneg');
+var vortexLayer=document.createElement('canvas');
+var posCtx,negCtx,vortCtx,fxpCtx,fxnCtx;
+var motes=[],ashes=[];
+var RM=false;
+try{RM=window.matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){}
+/* motion: 'on'/'off' is an explicit visitor override; null = follow the system */
+var motionOverride=null;
+try{
+  var msv=localStorage.getItem('diptych-motion');
+  if(msv==='on')motionOverride='on'; else if(msv==='off')motionOverride='off';
+}catch(e){}
+var motionBtnEl=document.getElementById('motionBtn');
+
+function sizeCanvas(c){
+  var r=c.getBoundingClientRect();
+  if(r.width<2||r.height<2)return null;
+  var dpr=Math.min(2,window.devicePixelRatio||1);
+  var w=Math.round(r.width*dpr), h=Math.round(r.height*dpr);
+  if(c.width!==w)c.width=w;
+  if(c.height!==h)c.height=h;
+  var ctx=c.getContext('2d');
+  ctx.setTransform(w/P_W,0,0,h/P_H,0,0);
+  return ctx;
+}
+
+function drawVortex(now){
+  if(!vortCtx||!vortexLayer.width)return;
+  var ang=motionEnabled()?0.085*Math.sin(now*0.00045)+0.045*Math.sin(now*0.00013+2.1):0;
+  vortCtx.setTransform(vortC.width/P_W,0,0,vortC.height/P_H,0,0);
+  vortCtx.clearRect(0,0,P_W,P_H);
+  vortCtx.save();
+  vortCtx.translate(300,530);vortCtx.rotate(ang);vortCtx.translate(-300,-530);
+  vortCtx.drawImage(vortexLayer,0,0,P_W,P_H);
+  vortCtx.restore();
+}
+
+function seedFx(){
+  motes=[];ashes=[];
+  var i;
+  for(i=0;i<24;i++){
+    motes.push({x:Math.random(),y:Math.random(),s:0.7+Math.random()*1.7,
+      v:0.028+Math.random()*0.05,a:0.16+Math.random()*0.3,
+      tw:0.6+Math.random()*1.6,ph:Math.random()*TAU,g:Math.random()<0.28});
+  }
+  for(i=0;i<34;i++){
+    ashes.push({x:Math.random(),y:Math.random(),s:0.6+Math.random()*1.5,
+      v:0.02+Math.random()*0.045,dx:(Math.random()-0.5)*0.012,
+      a:0.10+Math.random()*0.16,tw:0.5+Math.random()*1.4,ph:Math.random()*TAU});
+  }
+}
+
+/* ---------- the slow ascent: walker + birds, painted live ---------- */
+var WALK_PTS=[[112,630],[164,581],[222,528],[284,471],[340,411],[392,349]];
+var WALK_SEGS=[],WALK_LEN=0,_wi;
+for(_wi=0;_wi<WALK_PTS.length-1;_wi++){
+  var _wx=WALK_PTS[_wi+1][0]-WALK_PTS[_wi][0], _wy=WALK_PTS[_wi+1][1]-WALK_PTS[_wi][1];
+  var _wl=Math.sqrt(_wx*_wx+_wy*_wy);
+  WALK_SEGS.push({x:WALK_PTS[_wi][0],y:WALK_PTS[_wi][1],dx:_wx,dy:_wy,l:_wl});
+  WALK_LEN+=_wl;
+}
+var WALK_MS=36000;
+
+function smooth01(v){v=Math.max(0,Math.min(1,v));return v*v*(3-2*v);}
+function walkPoint(prog){
+  var d=prog*WALK_LEN,i;
+  for(i=0;i<WALK_SEGS.length;i++){
+    if(d<=WALK_SEGS[i].l||i===WALK_SEGS.length-1){
+      var t=Math.min(1,d/WALK_SEGS[i].l);
+      return [WALK_SEGS[i].x+WALK_SEGS[i].dx*t, WALK_SEGS[i].y+WALK_SEGS[i].dy*t];
+    }
+    d-=WALK_SEGS[i].l;
+  }
+  return [WALK_PTS[0][0],WALK_PTS[0][1]];
+}
+
+function drawWalker(ctx,px,py,phase,alpha){
+  if(alpha<=0.02)return;
+  var rng=mulberry32(8123);
+  var fc=C('#3c2714');
+  ctx.fillStyle='rgba(88,52,22,'+(0.30*alpha).toFixed(3)+')';
+  ctx.beginPath();ctx.ellipse(px+4,py+2.5,10.5,3.4,0,0,TAU);ctx.fill();
+  var bob=Math.abs(Math.sin(phase))*1.3;
+  var hipX=px-1, hipY=py-13-bob;
+  var sw=Math.sin(phase);
+  var f1x=hipX-3+sw*3.2, f1y=py-Math.max(0,sw)*2.4;
+  var f2x=hipX+3-sw*3.2, f2y=py-Math.max(0,-sw)*2.4;
+  brush(ctx,hipX,hipY,f1x,f1y,3.2,fc,{alpha:0.95*alpha,rng:rng});
+  brush(ctx,hipX,hipY,f2x,f2y,3.2,fc,{alpha:0.95*alpha,rng:rng});
+  var shX=hipX+6, shY=hipY-16;
+  brush(ctx,hipX-1,hipY+1,shX,shY,4.6,fc,{alpha:0.95*alpha,rng:rng,bend:-0.15});
+  dab(ctx,shX+3,shY-4,4.3,fc,0.98*alpha);
+  brush(ctx,shX-1,shY+5,shX+9,shY-2,2.4,fc,{alpha:0.95*alpha,rng:rng});
+  brush(ctx,shX-4,shY+8,shX-11+Math.sin(phase*0.7)*1.5,shY+13,2.6,C('#a84a34'),{alpha:0.9*alpha,rng:rng});
+}
+
+var BIRDS=[
+  {v:11,  y0:148, amp:14, ph:0.45, s:1.0,  fl:5.2},
+  {v:8.5, y0:174, amp:18, ph:0.62, s:0.85, fl:4.4},
+  {v:13,  y0:128, amp:11, ph:0.80, s:1.12, fl:6.1}
+];
+function drawBirds(ctx,now){
+  var span=P_W+150;
+  for(var i=0;i<BIRDS.length;i++){
+    var b=BIRDS[i];
+    var bx=-75+(((now*0.001*b.v)+b.ph*span)%span);
+    var by=b.y0+Math.sin(now*0.00035+b.ph*6.28)*b.amp;
+    var flap=0.45+0.55*(0.5+0.5*Math.sin(now*0.001*b.fl+b.ph*9));
+    var w=7*b.s;
+    ctx.strokeStyle='rgba(90,58,30,0.78)';
+    ctx.lineWidth=1.8*b.s;
+    ctx.lineCap='round';
+    ctx.beginPath();
+    ctx.moveTo(bx-w,by);
+    ctx.quadraticCurveTo(bx-w*0.5,by-6.5*b.s*flap,bx,by-1*b.s);
+    ctx.quadraticCurveTo(bx+w*0.5,by-6.5*b.s*flap,bx+w,by);
+    ctx.stroke();
+  }
+}
+
+function stepFx(dt,now){
+  now=now||0;
+  var i,m;
+  if(fxpCtx&&fxpC.width){
+    fxpCtx.setTransform(fxpC.width/P_W,0,0,fxpC.height/P_H,0,0);
+    fxpCtx.clearRect(0,0,P_W,P_H);
+    /* the climber, slowly rising stone to stone */
+    var prog=motionEnabled()?((now%WALK_MS)/WALK_MS):0.45;
+    var wp=walkPoint(prog);
+    var fade=Math.min(smooth01(prog/0.07),smooth01((1-prog)/0.10));
+    var phase=(prog*WALK_LEN/26)*Math.PI;
+    drawWalker(fxpCtx,wp[0],wp[1],phase,fade);
+    /* the birds, drifting toward the sun */
+    drawBirds(fxpCtx,now);
+    for(i=0;i<motes.length;i++){
+      m=motes[i];
+      m.y-=m.v*dt/1000;
+      if(m.y<-0.03){m.y=1.03;m.x=Math.random();}
+      var x=m.x*P_W, y=m.y*P_H;
+      var al=m.a*(0.55+0.45*Math.sin(now*0.001*m.tw+m.ph));
+      if(al<0.02)continue;
+      fxpCtx.fillStyle='rgba(255,232,168,'+al.toFixed(3)+')';
+      fxpCtx.beginPath();fxpCtx.arc(x,y,m.s,0,TAU);fxpCtx.fill();
+      if(m.g){
+        fxpCtx.strokeStyle='rgba(255,240,190,'+(al*0.55).toFixed(3)+')';
+        fxpCtx.lineWidth=0.8;
+        fxpCtx.beginPath();
+        fxpCtx.moveTo(x-m.s*3.2,y);fxpCtx.lineTo(x+m.s*3.2,y);
+        fxpCtx.moveTo(x,y-m.s*3.2);fxpCtx.lineTo(x,y+m.s*3.2);
+        fxpCtx.stroke();
+      }
+    }
+  }
+  if(fxnCtx&&fxnC.width){
+    fxnCtx.setTransform(fxnC.width/P_W,0,0,fxnC.height/P_H,0,0);
+    fxnCtx.clearRect(0,0,P_W,P_H);
+    for(i=0;i<ashes.length;i++){
+      m=ashes[i];
+      m.y+=m.v*dt/1000; m.x+=m.dx*dt/1000;
+      if(m.y>1.03){m.y=-0.03;m.x=Math.random();}
+      if(m.x<0)m.x+=1; if(m.x>1)m.x-=1;
+      var x2=m.x*P_W, y2=m.y*P_H;
+      var al2=m.a*(0.6+0.4*Math.sin(now*0.0012*m.tw+m.ph));
+      if(al2<0.02)continue;
+      fxnCtx.fillStyle='rgba(186,192,210,'+al2.toFixed(3)+')';
+      fxnCtx.beginPath();fxnCtx.arc(x2,y2,m.s,0,TAU);fxnCtx.fill();
+    }
+  }
+}
+
+function paintAll(){
+  posCtx=sizeCanvas(posC); if(posCtx)paintPositive(posCtx);
+  negCtx=sizeCanvas(negC); if(negCtx)paintNegative(negCtx);
+  wmEmbedLSB(posC); wmEmbedLSB(negC);
+  vortCtx=sizeCanvas(vortC);
+  if(vortCtx){
+    vortexLayer.width=vortC.width; vortexLayer.height=vortC.height;
+    var vc=vortexLayer.getContext('2d');
+    vc.setTransform(vortexLayer.width/P_W,0,0,vortexLayer.height/P_H,0,0);
+    paintVortex(vc);
+    drawVortex(0);
+  }
+  fxpCtx=sizeCanvas(fxpC); fxnCtx=sizeCanvas(fxnC);
+  seedFx();
+  if(!motionEnabled())stepFx(16,0);
+}
+
+/* loop control — resilient on iOS: guarded frames, a stall watchdog that can
+   fall back to a timer driver, and a re-kick when the tab becomes visible */
+var raf=window.requestAnimationFrame?
+  function(cb){return window.requestAnimationFrame(cb);}:
+  function(cb){return setTimeout(function(){cb(performance.now());},33);};
+var running=false,lastTs=0,useTimerDriver=false,timerId=null,stallCount=0;
+
+function motionEnabled(){
+  if(motionOverride==='on')return true;
+  if(motionOverride==='off')return false;
+  return !RM;
+}
+function syncMotionBtn(){
+  if(!motionBtnEl)return;
+  var on=motionEnabled();
+  motionBtnEl.classList.toggle('on',on);
+  motionBtnEl.classList.toggle('off',!on);
+  motionBtnEl.setAttribute('aria-pressed',on?'true':'false');
+}
+function driverTick(){frame(performance.now());}
+function frame(now){
+  if(!motionEnabled()){running=false;return;}
+  running=true;
+  var dt=Math.min(60,(now-lastTs)||16); lastTs=now;
+  try{drawVortex(now);}catch(e){}
+  try{stepFx(dt,now);}catch(e){}
+  if(!useTimerDriver)raf(frame);
+}
+function startLoop(){
+  if(running)return;
+  if(!motionEnabled())return;
+  running=true;
+  if(useTimerDriver){
+    if(timerId==null)timerId=setInterval(driverTick,33);
+  }else{
+    lastTs=performance.now();
+    raf(frame);
+  }
+}
+
+var rto=null;
+var vpW=0,vpH=0;
+function onResize(){
+  if(rto)clearTimeout(rto);
+  rto=setTimeout(function(){
+    /* iOS fires resize on toolbar show/hide while scrolling — skip no-op repaints */
+    var w=window.innerWidth,h=window.innerHeight;
+    if(Math.abs(w-vpW)<2&&Math.abs(h-vpH)<2)return;
+    vpW=w;vpH=h;
+    paintAll();
+    lastTs=performance.now();
+  },180);
+}
+window.addEventListener('resize',onResize);
+
+/* ------- the canvases are the artwork: discourage the easy lifts ------- */
+var wraps=document.querySelectorAll('.canvas-wrap'),wi2;
+for(wi2=0;wi2<wraps.length;wi2++){
+  wraps[wi2].addEventListener('contextmenu',function(ev){ev.preventDefault();});
+}
+document.addEventListener('copy',function(ev){
+  try{
+    var sel=(window.getSelection?String(window.getSelection()):'')||'';
+    if(sel.replace(/\s+/g,'').length>40&&ev.clipboardData){
+      ev.clipboardData.setData('text/plain',
+        sel+'\n\n— “The Climb & the Loop” · artwork & words by CKH');
+      ev.preventDefault();
+    }
+  }catch(e){}
+});
+
+/* a quiet triple-knock on the red seal — the signature shows itself for a breath */
+var sealTaps=0,sealTimer=null;
+var sealEl=document.querySelector('.seal.sun');
+if(sealEl){
+  sealEl.addEventListener('click',function(){
+    sealTaps++;clearTimeout(sealTimer);
+    sealTimer=setTimeout(function(){sealTaps=0;},700);
+    if(sealTaps>=3){
+      sealTaps=0;
+      wmReveal=true;paintAll();
+      setTimeout(function(){wmReveal=false;paintAll();},5000);
+    }
+  });
+}
+if((location.hash||'').toLowerCase().indexOf('ckh')>-1)wmReveal=true;
+
+/* the Motion pill: an explicit visitor choice that outranks Reduce Motion */
+if(motionBtnEl){
+  motionBtnEl.addEventListener('click',function(){
+    motionOverride=motionEnabled()?'off':'on';
+    try{localStorage.setItem('diptych-motion',motionOverride);}catch(e){}
+    syncMotionBtn();
+    if(motionEnabled()){
+      startLoop();
+    }else{
+      if(timerId!=null){clearInterval(timerId);timerId=null;}
+      drawVortex(0);stepFx(16,0);
+    }
+  });
+}
+
+/* language switcher */
+var langNav=document.querySelector('.lang');
+if(langNav){
+  langNav.addEventListener('click',function(ev){
+    var t=ev.target;
+    var b=(t&&t.closest)?t.closest('button'):null;
+    if(b&&b.getAttribute('data-lang'))applyLang(b.getAttribute('data-lang'));
+  });
+}
+
+/* pick a tongue: saved choice, else the visitor's own */
+(function(){
+  var saved=null;
+  try{saved=localStorage.getItem('diptych-lang');}catch(e){}
+  if(saved&&LANGS.indexOf(saved)>-1){applyLang(saved);return;}
+  var n='';
+  try{n=(navigator.language||'').toLowerCase();}catch(e){}
+  if(n.indexOf('zh')===0){
+    if(n.indexOf('tw')>-1||n.indexOf('hk')>-1||n.indexOf('mo')>-1||n.indexOf('hant')>-1)applyLang('zhHant');
+    else applyLang('zhHans');
+  }
+  else if(n.indexOf('ja')===0)applyLang('ja');
+  else if(n.indexOf('ko')===0)applyLang('ko');
+  else applyLang('en');
+})();
+
+syncMotionBtn();
+vpW=window.innerWidth;vpH=window.innerHeight;
+startLoop();
+
+/* iOS safety nets: re-kick a stalled/throttled rAF; after three stalls, drive
+   the loop with a plain timer; re-kick whenever the tab returns to view */
+setInterval(function(){
+  if(document.hidden||!motionEnabled()||!running)return;
+  if(performance.now()-lastTs>2200){
+    stallCount++;
+    if(stallCount>=3&&!useTimerDriver){
+      useTimerDriver=true;
+      running=false;
+    }
+    running=false;startLoop();
+  }else{
+    stallCount=0;
+  }
+},1500);
+document.addEventListener('visibilitychange',function(){
+  if(!document.hidden){
+    lastTs=performance.now();
+    running=false;startLoop();
+  }
+});
+})();
+</script>
+</body>
+</html>
