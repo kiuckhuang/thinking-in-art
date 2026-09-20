@@ -33,6 +33,11 @@ only, and may carry conditions.
 Every rendering of these two panels carries an invisible provenance signature tied to
 **plate id 4351**. Copies made without permission can still be identified as copies.
 
+**What is a “plate id”?** A short, hand-set serial — `4351` — the artist's own edition
+number for this work, in the tradition of numbered printmaking plates. It is self-declared:
+it belongs to no registry and required no registration. Its only job is to tie every copy
+of this artwork back to this exact plate, this license, and this repository.
+
 ---
 
 *中文摘要（僅供參考，一切以英文版本為準）：本作品可自由閱覽、連結；未經 CKH 書面許可，

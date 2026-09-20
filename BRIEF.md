@@ -180,7 +180,9 @@ signatures glow for 5 s; or load the page with `#ckh` in the URL (persistent rev
 **Attribution scaffolding:** `<meta name="author" content="CKH">`, copyright + description metas,
 signed source comment (plate id **4351**), `body[data-author="CKH"]`, seal `title="by CKH"`, and
 the `.attrib` footer line — rendered in the wall color `#1a130d` (invisible, selectable, turns
-black in `@media print`).
+black in `@media print`). Note: **`4351` is a self-declared edition number** — invented by the
+artist, owned by no registry, requiring no registration (LICENSE.md explains this to viewers).
+Keep it stable across every copy, embed, and document; do not renumber casually.
 
 **License:** the repository carries a plain-language **View-Only License** (`LICENSE.md`):
 viewing, linking, and short attributed quotes are free; copying/republishing, modification,
