@@ -334,9 +334,9 @@ var I18N={
     sub:'一心兩向 — 同一調色、同一筆觸、同一意境',
     plate1:'第一聯 · 過程',
     plate2:'第二聯 · 迴旋',
-    p1verb:'心向正面',
+    p1verb:'正面思維',
     p1main:'跌倒亦是前行 — 每一跌是一塊石,每一石是一級,砌往成功。',
-    p2verb:'心向陰暗',
+    p2verb:'負面思維',
     p2a:'錯誤銘記於心,自責與怨人不住迴旋,',
     p2b:'成功便愈退愈遠。',
     epiLabel:'當初那一句 —',
@@ -360,9 +360,9 @@ var I18N={
     sub:'一心两向 — 同一调色、同一笔触、同一意境',
     plate1:'第一联 · 过程',
     plate2:'第二联 · 回旋',
-    p1verb:'心向正面',
+    p1verb:'正面思维',
     p1main:'跌倒亦是前行 — 每一跌是一块石,每一石是一级,砌往成功。',
-    p2verb:'心向阴暗',
+    p2verb:'负面思维',
     p2a:'错误铭记于心,自责与怨人不住回旋,',
     p2b:'成功便愈退愈远。',
     epiLabel:'当初那一句 —',
@@ -1247,20 +1247,12 @@ if(langNav){
   });
 }
 
-/* pick a tongue: saved choice, else the visitor's own */
+/* pick a tongue: a saved choice always wins; otherwise the house default — 繁體中文（香港） */
 (function(){
   var saved=null;
   try{saved=localStorage.getItem('diptych-lang');}catch(e){}
   if(saved&&LANGS.indexOf(saved)>-1){applyLang(saved);return;}
-  var n='';
-  try{n=(navigator.language||'').toLowerCase();}catch(e){}
-  if(n.indexOf('zh')===0){
-    if(n.indexOf('tw')>-1||n.indexOf('hk')>-1||n.indexOf('mo')>-1||n.indexOf('hant')>-1)applyLang('zhHant');
-    else applyLang('zhHans');
-  }
-  else if(n.indexOf('ja')===0)applyLang('ja');
-  else if(n.indexOf('ko')===0)applyLang('ko');
-  else applyLang('en');
+  applyLang('zhHant');
 })();
 
 syncMotionBtn();

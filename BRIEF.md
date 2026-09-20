@@ -1,4 +1,4 @@
-# The Climb & the Loop — Master Brief v3.1
+# The Climb & the Loop — Master Brief v3.2
 
 > **How to use this file.** This is the complete, self-contained prompt for regenerating or
 > improving the artwork `the-climb-and-the-loop.html`. Hand this file — plus the current HTML,
@@ -124,8 +124,9 @@ sky strokes split into blue set (upper) and warm set (lower). Vignette neutral
 ## 6 · Copy (artistic rewording) & i18n
 
 Five languages: `en`, `zhHant` (Traditional, HK), `zhHans`, `ja`, `ko`.
-Switcher = brass pills in the header. Persist in `localStorage['diptych-lang']`; first visit
-auto-detects from `navigator.language` (`zh-TW/HK/MO/hant → zhHant`, other `zh → zhHans`).
+Switcher = brass pills in the header. Persist in `localStorage['diptych-lang']`; **first visit
+defaults to Traditional Hong Kong Chinese (`zhHant`)** — the house default, regardless of the
+visitor's browser language; a visitor's switched choice persists and wins on later visits.
 `<html lang>` is updated. **Any new string must be added in all five languages** — no exceptions.
 
 Canvas-painted labels switch language too: each language carries its own canvas font stack
@@ -229,6 +230,7 @@ grep -c "wmStamp\|wmEmbedLSB\|wmExtractLSB" the-climb-and-the-loop.html   # expe
 #    triple-click the red seal → signatures appear 5 s; append #ckh → persistent reveal;
 #    copy a caption → clipboard ends with the CKH attribution line;
 #    footer licence line links to /LICENSE.md and it serves HTTP 200;
+#    first visit opens in 繁體中文（香港）by default; a chosen language persists;
 #    tap the Motion pill → animation stops/starts and survives a reload;
 #    on iPhone Safari (real Safari, not Files/QuickLook preview): painting fills its frame
 #    and the climber/birds/vortex/particles move — also verify with Reduce Motion ON,
@@ -255,7 +257,8 @@ grep -c "wmStamp\|wmEmbedLSB\|wmExtractLSB" the-climb-and-the-loop.html   # expe
 - Commissioner & author: **CKH** · MMXXV · plate id 4351
 - Lineage: seed words → oil-diptych visualization → multilingual (en/繁HK/简/日/한) →
   living panel (climber & birds animated) → dawn sky revision → embedded invisible watermark
-  “by CKH” + anti-lift friction → view-only license (`LICENSE.md`) → this brief (v3.1).
+  “by CKH” + anti-lift friction → view-only license (`LICENSE.md`) → default language 繁體（香港）,
+  「正面思維／負面思維」 → this brief (v3.2).
 
 ---
 
