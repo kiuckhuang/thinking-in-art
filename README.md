@@ -42,6 +42,13 @@ Hand `BRIEF.md` to any AI agent or designer. It contains the seed idea, the pale
 rules, the full animation and i18n specs, the watermark internals, and a verification checklist.
 After any change, re-run the checklist in §9 and keep `index.html` in sync.
 
+## License
+
+**View-only.** © MMXXV CKH — you may read, view, and link freely; copying, republishing,
+modification, derivative works, and commercial use require prior written permission.
+See [LICENSE.md](LICENSE.md). Standard open licenses (MIT, CC-BY, …) were deliberately not
+used: their whole purpose is to grant what this work reserves.
+
 ---
 
 © MMXXV CKH — artwork, words &amp; code. All rights reserved. The pixels remember their painter.

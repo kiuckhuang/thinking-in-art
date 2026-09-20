@@ -1,4 +1,4 @@
-# The Climb & the Loop — Master Brief v3
+# The Climb & the Loop — Master Brief v3.1
 
 > **How to use this file.** This is the complete, self-contained prompt for regenerating or
 > improving the artwork `the-climb-and-the-loop.html`. Hand this file — plus the current HTML,
@@ -134,7 +134,8 @@ ja: Hiragino Mincho / Yu Mincho; ko: Nanum Myeongjo / Batang — upright, never 
 and calls `paintAll()` on switch. Current keys per language: `over, title, sub, plate1, plate2,
 p1verb, p1main, p2verb, p2a, p2b, epiLabel, epi1, epi2, foot, motion, ariaPos, ariaNeg, cFall, cSuccess,
 cFarther, cMistake, cRemember, cSelf, cOthers`. `epi1`/`epi2` are the commissioner's verbatim
-English lines in **every** language.
+English lines in **every** language. Legal lines (the two epigraphs and the footer licence
+notice) intentionally stay in English across all languages — like museum labels.
 
 Current English master copy (keep the spirit when revising; restore nothing “lost”):
 
@@ -180,6 +181,14 @@ signed source comment (plate id **4351**), `body[data-author="CKH"]`, seal `titl
 the `.attrib` footer line — rendered in the wall color `#1a130d` (invisible, selectable, turns
 black in `@media print`).
 
+**License:** the repository carries a plain-language **View-Only License** (`LICENSE.md`):
+viewing, linking, and short attributed quotes are free; copying/republishing, modification,
+derivative works, commercial use (incl. model training, NFTs), and watermark-stripping require
+prior written permission from CKH. Standard alternates were evaluated and **rejected** —
+CC BY-NC-ND 4.0 permits verbatim redistribution, PolyForm Strict 1.0.0 permits private
+modification; neither matches “no copy, no modify without permission”. The footer shows a
+visible licence line linking to `LICENSE.md`; the hidden `.attrib` line carries it too.
+
 **Anti-lift friction (keep gentle — no devtools traps, no global right-click ban):**
 `contextmenu` prevented on `.canvas-wrap` only; canvases `pointer-events:none`,
 `user-select:none`, `-webkit-touch-callout:none`, `-webkit-user-drag:none`; a `copy` listener
@@ -219,6 +228,7 @@ grep -c "wmStamp\|wmEmbedLSB\|wmExtractLSB" the-climb-and-the-loop.html   # expe
 # 4. manual: open the file, switch all 5 languages, confirm canvas labels change;
 #    triple-click the red seal → signatures appear 5 s; append #ckh → persistent reveal;
 #    copy a caption → clipboard ends with the CKH attribution line;
+#    footer licence line links to /LICENSE.md and it serves HTTP 200;
 #    tap the Motion pill → animation stops/starts and survives a reload;
 #    on iPhone Safari (real Safari, not Files/QuickLook preview): painting fills its frame
 #    and the climber/birds/vortex/particles move — also verify with Reduce Motion ON,
@@ -245,7 +255,7 @@ grep -c "wmStamp\|wmEmbedLSB\|wmExtractLSB" the-climb-and-the-loop.html   # expe
 - Commissioner & author: **CKH** · MMXXV · plate id 4351
 - Lineage: seed words → oil-diptych visualization → multilingual (en/繁HK/简/日/한) →
   living panel (climber & birds animated) → dawn sky revision → embedded invisible watermark
-  “by CKH” + anti-lift friction → this brief.
+  “by CKH” + anti-lift friction → view-only license (`LICENSE.md`) → this brief (v3.1).
 
 ---
 

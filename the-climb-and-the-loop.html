@@ -177,8 +177,16 @@
     color:#1a130d;user-select:text;-webkit-user-select:text;
     max-width:96%;overflow:hidden;
   }
+  .licence{
+    flex-basis:100%;margin:12px 0 0;
+    font-size:11.5px;font-style:normal;letter-spacing:.04em;color:#8a7a5e;
+  }
+  .licence a{color:#a89368;text-decoration:none;border-bottom:1px dotted #8a7a5e}
+  .licence a:focus-visible{outline:1px dashed #a89368;outline-offset:2px}
   @media print{
     .attrib{color:#000}
+    .licence{color:#000}
+    .licence a{color:#000}
   }
 
   @media (max-width:880px){
@@ -280,7 +288,8 @@
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#aab2c8" stroke-width="1.7" stroke-linecap="round"><path d="M12 12 a1.2 1.2 0 0 1 1.2 1.2 a2.4 2.4 0 0 1 -2.4 2.4 a3.6 3.6 0 0 1 -3.6 -3.6 a4.8 4.8 0 0 1 4.8 -4.8 a6 6 0 0 1 6 6"/></svg>
     </span>
   </span>
-  <div class="attrib">“The Climb &amp; the Loop” — artwork, words &amp; code by CKH · MMXXV · plate 4351</div>
+  <p class="licence">© MMXXV CKH — <em>view-only license</em>: look freely, ask before taking · <a href="LICENSE.md" target="_blank" rel="noopener">LICENSE.md</a></p>
+  <div class="attrib">“The Climb &amp; the Loop” — artwork, words &amp; code by CKH · MMXXV · plate 4351 · view-only license</div>
 </footer>
 
 <script>
